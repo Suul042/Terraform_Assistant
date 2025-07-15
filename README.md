@@ -395,16 +395,9 @@ ALLOWED_HOSTS=["yourapp.com"]
 
 MIT License. See the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
-
-- Documentation: https://docs.terraform-assistant.com
-- Issue Tracker: https://github.com/your-org/terraform-assistant/issues
-- Discussions: https://github.com/your-org/terraform-assistant/discussions
-- Email: support@terraform-assistant.com
-
 ## 🔄 Changelog
 
-### v1.0.0 (2024-01-15)
+### v1.0.0 (2025-07-15)
 - Initial release
 - Support for AWS, Azure, and GCP cloud platforms
 - Intelligent code generation and AI-enhanced features
