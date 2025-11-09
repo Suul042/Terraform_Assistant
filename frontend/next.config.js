@@ -5,6 +5,8 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  // Enable standalone output for Docker deployment
+  output: 'standalone',
   env: {
     CUSTOM_KEY: 'my-value',
   },
