@@ -276,3 +276,85 @@ class TemplateData(BaseModel):
     security_considerations: Optional[Dict[str, Any]] = Field(None, description="Security considerations")
     variables: Optional[Dict[str, Any]] = Field(None, description="Template variables")
     conditions: Optional[Dict[str, Any]] = Field(None, description="Template conditions")
+
+
+# Additional Models for API Endpoints
+
+class CodeGenerationRequest(BaseModel):
+    """Request for code generation"""
+    provider: str = Field(..., description="Cloud provider (aws, azure, gcp)")
+    resource_type: str = Field(..., description="Resource type to generate")
+    description: Optional[str] = Field(None, description="Natural language description")
+    parameters: Dict[str, Any] = Field(default_factory=dict, description="Resource parameters")
+    force_regenerate: bool = Field(False, description="Force regeneration, skip cache")
+
+
+class CodeGenerationResponse(BaseModel):
+    """Response for code generation"""
+    code: str = Field(..., description="Generated Terraform code")
+    provider: str = Field(..., description="Cloud provider")
+    resource_type: str = Field(..., description="Resource type")
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="Generation metadata")
+    cached: bool = Field(False, description="Whether result was cached")
+
+
+class GenerationStatus(BaseModel):
+    """Status of a generation job"""
+    job_id: str = Field(..., description="Job identifier")
+    status: str = Field(..., description="Job status (pending, running, completed, failed)")
+    progress: int = Field(..., ge=0, le=100, description="Progress percentage")
+    result: Optional[Dict[str, Any]] = Field(None, description="Result if completed")
+
+
+class ValidationIssue(BaseModel):
+    """A validation issue"""
+    severity: str = Field(..., description="Issue severity (error, warning, info)")
+    line: int = Field(..., description="Line number")
+    message: str = Field(..., description="Issue message")
+    rule: str = Field(..., description="Rule that was violated")
+    suggestion: Optional[str] = Field(None, description="Suggested fix")
+
+
+class CodeValidationRequest(BaseModel):
+    """Request for code validation"""
+    code: str = Field(..., description="Terraform code to validate")
+    provider: Optional[str] = Field(None, description="Cloud provider")
+
+
+class CodeValidationResponse(BaseModel):
+    """Response for code validation"""
+    valid: bool = Field(..., description="Whether code is valid")
+    issues: List[ValidationIssue] = Field(default_factory=list, description="Validation issues")
+    score: int = Field(..., ge=0, le=100, description="Code quality score")
+    recommendations: List[str] = Field(default_factory=list, description="Recommendations")
+
+
+class TemplateResponse(BaseModel):
+    """Template response"""
+    id: str = Field(..., description="Template ID")
+    name: str = Field(..., description="Template name")
+    description: str = Field(..., description="Template description")
+    provider: str = Field(..., description="Cloud provider")
+    category: str = Field(..., description="Template category")
+    code: str = Field(..., description="Template code")
+    variables: Dict[str, Any] = Field(default_factory=dict, description="Template variables")
+    tags: List[str] = Field(default_factory=list, description="Template tags")
+
+
+class TemplateListResponse(BaseModel):
+    """List of templates response"""
+    templates: List[Dict[str, Any]] = Field(..., description="List of templates")
+    total: int = Field(..., description="Total number of templates")
+    page: int = Field(..., description="Current page")
+    page_size: int = Field(..., description="Page size")
+
+
+class TemplateCreateRequest(BaseModel):
+    """Request to create a template"""
+    name: str = Field(..., description="Template name")
+    description: str = Field(..., description="Template description")
+    provider: str = Field(..., description="Cloud provider")
+    category: str = Field(..., description="Template category")
+    code: str = Field(..., description="Template code")
+    variables: Optional[Dict[str, Any]] = Field(None, description="Template variables")
+    tags: Optional[List[str]] = Field(None, description="Template tags")

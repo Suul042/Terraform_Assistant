@@ -1,0 +1,37 @@
+[flake8]
+# Flake8 configuration
+
+max-line-length = 120
+max-complexity = 10
+
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    env,
+    .eggs,
+    *.egg,
+    build,
+    dist,
+    .tox,
+    alembic/versions
+
+ignore =
+    # E203: whitespace before ':'
+    E203,
+    # E501: line too long (handled by black)
+    E501,
+    # W503: line break before binary operator
+    W503,
+    # W504: line break after binary operator
+    W504
+
+per-file-ignores =
+    # Ignore imports in __init__.py
+    __init__.py:F401
+    # Ignore unused imports in migrations
+    alembic/versions/*.py:F401
+
+count = True
+statistics = True

@@ -5,7 +5,8 @@ import os
 from functools import lru_cache
 from typing import Optional, List
 
-from pydantic import BaseSettings, Field
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -56,10 +57,28 @@ class Settings(BaseSettings):
     
     # Monitoring
     PROMETHEUS_ENABLED: bool = Field(default=False, env="PROMETHEUS_ENABLED")
-    
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+
+    # CORS
+    CORS_ORIGINS: List[str] = Field(
+        default=["http://localhost:3000"],
+        env="CORS_ORIGINS"
+    )
+    ALLOWED_HOSTS: List[str] = Field(
+        default=["*"],
+        env="ALLOWED_HOSTS"
+    )
+
+    # Elasticsearch
+    ELASTICSEARCH_URL: Optional[str] = Field(None, env="ELASTICSEARCH_URL")
+
+    # Logging
+    LOG_LEVEL: str = Field(default="INFO", env="LOG_LEVEL")
+
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": True,
+        "extra": "allow"
+    }
 
 
 @lru_cache()
